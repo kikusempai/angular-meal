@@ -1,3 +1,35 @@
 <div class="home-container">
     <h1>Hello Angular Meal, my old friend</h1>
+
+    <mat-tab-group>
+        <mat-tab label="Featured"> Such featured </mat-tab>
+        <mat-tab label="Categories"> Much categories </mat-tab>
+    </mat-tab-group>
+
+    <div class="search-section">
+        <form (ngSubmit)="onSearch()" class="search-form">
+            <div class="search-input-group">
+                <input type="text" [(ngModel)]="searchQuery" placeholder="Search for meals..." class="search-input"
+                    name="searchQuery" #searchInput="ngModel" required>
+                <button type="submit" class="search-button" [disabled]="!searchQuery?.trim()">
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="search-results" *ngIf="searchResults.length > 0">
+        <h2>Search Results</h2>
+        <div class="meals-grid">
+            <app-preview-recipe *ngFor="let meal of searchResults" [meal]="meal"></app-preview-recipe>
+        </div>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+        <p>Searching for meals...</p>
+    </div>
+
+    <div class="error" *ngIf="errorMessage">
+        <p>{{ errorMessage }}</p>
+    </div>
 </div>

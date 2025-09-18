@@ -1,0 +1,57 @@
+.meal-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.meal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.meal-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.meal-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 1rem 1rem 0.5rem;
+}
+
+.meal-link {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.meal-link:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.meal-category {
+    color: #666;
+    margin: 0 1rem 1rem;
+    font-size: 0.9rem;
+}
+
+.loading {
+    margin: 2rem 0;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.error {
+    margin: 2rem 0;
+    color: #dc3545;
+    font-size: 1.1rem;
+    background-color: #f8d7da;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+}

@@ -1,0 +1,47 @@
+<div class="recipe-container" *ngIf="meal$ | async as meal; else loadingOrError">
+    <div class="recipe-header">
+        <h1>{{ meal.strMeal }}</h1>
+        <p class="recipe-category">{{ meal.strCategory }} • {{ meal.strArea }}</p>
+    </div>
+
+    <div class="recipe-content">
+        <div class="recipe-image">
+            <img [src]="meal.strMealThumb" [alt]="meal.strMeal" class="main-image">
+        </div>
+
+        <div class="recipe-details">
+            <div class="recipe-section">
+                <h2>Instructions</h2>
+                <p class="instructions">{{ meal.strInstructions }}</p>
+            </div>
+
+            <div class="recipe-section" *ngIf="meal.strYoutube">
+                <h2>Video Tutorial</h2>
+                <a [href]="meal.strYoutube" target="_blank" class="youtube-link">
+                    Watch on YouTube
+                </a>
+            </div>
+
+            <div class="recipe-section" *ngIf="meal.strSource">
+                <h2>Source</h2>
+                <a [href]="meal.strSource" target="_blank" class="source-link">
+                    View Original Recipe
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #loadingOrError>
+    <div class="loading-error" *ngIf="errorMessage; else loading">
+        <h2>Error</h2>
+        <p>{{ errorMessage }}</p>
+        <a routerLink="/" class="back-link">← Back to Home</a>
+    </div>
+
+    <ng-template #loading>
+        <div class="loading">
+            <h2>Loading recipe...</h2>
+        </div>
+    </ng-template>
+</ng-template>
