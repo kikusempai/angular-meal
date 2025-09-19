@@ -4,14 +4,14 @@ import { RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
-import { MealService, Meal } from '../services/meal.service';
+import { MealService, Meal } from '../../services/meal.service';
 
 @Component({
   selector: 'app-view-recipe',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './view-recipe.component.html',
-  styleUrl: './view-recipe.component.css'
+  styleUrl: './view-recipe.component.scss'
 })
 export class ViewRecipeComponent implements OnInit {
   meal$: Observable<Meal | null> = of(null);
@@ -31,9 +31,6 @@ export class ViewRecipeComponent implements OnInit {
           return of(null);
         }
 
-        // For now, we'll need to implement a method to get meal by ID
-        // Since TheMealDB API doesn't have a direct "get by ID" endpoint,
-        // we'll need to use the lookup endpoint
         return this.mealService.getMealById(mealId).pipe(
           catchError(error => {
             this.errorMessage = 'Failed to load meal details';

@@ -48,6 +48,7 @@ export class MealService {
             })
         );
     }
+
     searchMeals(query: string): Observable<Meal[]> {
         if (!query || query.trim().length === 0) {
             return throwError(() => new Error('Search query cannot be empty'));

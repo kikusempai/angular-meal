@@ -1,8 +1,16 @@
 import { Routes } from '@angular/router';
-import { ViewRecipeComponent } from './view-recipe/view-recipe.component';
-import { HomeComponent } from './home/home.component';
+import { ViewRecipeComponent } from './pages/view-recipe/view-recipe.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'view/:id', component: ViewRecipeComponent }
+    {
+        path: '',
+        component: HomeComponent,
+        data: { breadcrumb: 'Home' },
+    },
+    {
+        path: 'view/:id',
+        component: ViewRecipeComponent,
+        data: { breadcrumb: 'Recipe Details' },
+    },
 ];

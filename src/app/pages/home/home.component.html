@@ -1,11 +1,4 @@
 <div class="home-container">
-    <h1>Hello Angular Meal, my old friend</h1>
-
-    <mat-tab-group>
-        <mat-tab label="Featured"> Such featured </mat-tab>
-        <mat-tab label="Categories"> Much categories </mat-tab>
-    </mat-tab-group>
-
     <div class="search-section">
         <form (ngSubmit)="onSearch()" class="search-form">
             <div class="search-input-group">
@@ -31,5 +24,16 @@
 
     <div class="error" *ngIf="errorMessage">
         <p>{{ errorMessage }}</p>
+    </div>
+
+    <div class="categories-results" *ngIf="categoriesResults.length > 0">
+        <h2>Categories</h2>
+        <div class="categories-grid">
+            <mat-list>
+                <mat-list-item *ngFor="let category of categoriesResults">
+                    <a [routerLink]="['/category', category.strCategory]">{{ category.strCategory }}</a>
+                </mat-list-item>
+            </mat-list>
+        </div>
     </div>
 </div>

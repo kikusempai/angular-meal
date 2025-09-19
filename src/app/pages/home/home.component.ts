@@ -3,25 +3,28 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
-import { MealService, Meal } from '../services/meal.service';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { PreviewRecipeComponent } from '../preview-recipe/preview-recipe.component';
+import { MealService, Meal, Category } from '../../services/meal.service';
+import { PreviewRecipeComponent } from '../../components/preview-recipe/preview-recipe.component';
+import { MatList, MatListItem } from '@angular/material/list';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, MatTabGroup, MatTab, PreviewRecipeComponent],
+  imports: [CommonModule, FormsModule, HttpClientModule, PreviewRecipeComponent, MatList, MatListItem, RouterModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   searchQuery: string = '';
   searchResults: Meal[] = [];
+  categoriesResults: Category[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
 
   private destroy$ = new Subject<void>();
   private searchSubject$ = new Subject<string>();
+  private categoriesSubject$ = new Subject<string>();
 
   constructor(private mealService: MealService) { }
 
@@ -52,6 +55,28 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.searchResults = [];
       }
     });
+
+    this.categoriesSubject$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(query => {
+        return this.mealService.listCategories();
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (results) => {
+        this.categoriesResults = results;
+        this.isLoading = false;
+        if (results.length === 0) {
+          this.errorMessage = 'No categories available';
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'An error occurred.';
+        this.isLoading = false;
+        this.categoriesResults = [];
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -63,10 +88,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.searchQuery && this.searchQuery.trim().length > 0) {
       this.searchSubject$.next(this.searchQuery.trim());
     }
-  }
-
-  onInputChange(): void {
-    // Optional: Implement real-time search as user types
-    // this.searchSubject$.next(this.searchQuery.trim());
   }
 }
