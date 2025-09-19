@@ -33,14 +33,14 @@
 </div>
 
 <ng-template #loadingOrError>
-    <div class="loading-error" *ngIf="errorMessage; else loading">
+    <div class="loading-error" *ngIf="error$ | async as error; else loading">
         <h2>Error</h2>
-        <p>{{ errorMessage }}</p>
+        <p>{{ error }}</p>
         <a routerLink="/" class="back-link">← Back to Home</a>
     </div>
 
     <ng-template #loading>
-        <div class="loading">
+        <div class="loading" *ngIf="loading$ | async">
             <h2>Loading recipe...</h2>
         </div>
     </ng-template>

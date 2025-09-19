@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CategoriesComponent } from './categories.component';
+import { GridRecipeComponent } from './grid-recipe.component';
 
-describe('CategoriesComponent', () => {
-  let component: CategoriesComponent;
-  let fixture: ComponentFixture<CategoriesComponent>;
+describe('GridRecipeComponent', () => {
+  let component: GridRecipeComponent;
+  let fixture: ComponentFixture<GridRecipeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CategoriesComponent]
+      imports: [GridRecipeComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(CategoriesComponent);
+    fixture = TestBed.createComponent(GridRecipeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -3,8 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
-import { MealService, Meal } from '../../services/meal.service';
+import { switchMap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import * as RecipesActions from '../../store/recipes/recipes.actions';
+import * as RecipesSelectors from '../../store/recipes/recipes.selectors';
+import { Meal } from '../../services/meal.service';
 
 @Component({
   selector: 'app-view-recipe',
@@ -14,31 +18,30 @@ import { MealService, Meal } from '../../services/meal.service';
   styleUrl: './view-recipe.component.scss'
 })
 export class ViewRecipeComponent implements OnInit {
-  meal$: Observable<Meal | null> = of(null);
-  errorMessage: string = '';
+  meal$: Observable<Meal | null>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
 
   constructor(
     private route: ActivatedRoute,
-    private mealService: MealService
-  ) { }
+    private store: Store<AppState>
+  ) {
+    this.meal$ = this.store.select(RecipesSelectors.selectCurrentRecipe);
+    this.loading$ = this.store.select(RecipesSelectors.selectRecipeLoading);
+    this.error$ = this.store.select(RecipesSelectors.selectRecipeError);
+  }
 
   ngOnInit(): void {
-    this.meal$ = this.route.params.pipe(
+    this.route.params.pipe(
       switchMap(params => {
         const mealId = params['id'];
         if (!mealId) {
-          this.errorMessage = 'No meal ID provided';
           return of(null);
         }
 
-        return this.mealService.getMealById(mealId).pipe(
-          catchError(error => {
-            this.errorMessage = 'Failed to load meal details';
-            console.error('Error loading meal:', error);
-            return of(null);
-          })
-        );
+        this.store.dispatch(RecipesActions.loadRecipeById({ id: mealId }));
+        return of(mealId);
       })
-    );
+    ).subscribe();
   }
 }

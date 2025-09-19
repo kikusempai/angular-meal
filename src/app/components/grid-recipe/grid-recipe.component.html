@@ -1,0 +1,15 @@
+<div class="search-results" *ngIf="(recipes$ | async) as recipes; else noRecipes">
+    <div class="meals-grid">
+        <app-preview-recipe *ngFor="let meal of recipes" [meal]="meal"></app-preview-recipe>
+    </div>
+</div>
+
+<ng-template #noRecipes>
+    <div class="loading" *ngIf="recipesLoading$ | async">
+        <p>Looking for meals...</p>
+    </div>
+
+    <div class="error" *ngIf="recipesError$ | async as error">
+        <p>{{ error }}</p>
+    </div>
+</ng-template>

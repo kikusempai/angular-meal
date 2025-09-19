@@ -1,39 +1,58 @@
 <div class="home-container">
+    <form class="example-form">
+        <mat-form-field>
+          <mat-label>Filter by Area</mat-label>
+          <input type="text"
+                 aria-label="Area"
+                 matInput
+                 [formControl]="areaControl"
+                 [matAutocomplete]="auto">
+                 <mat-autocomplete #auto="matAutocomplete">
+                     @for (area of filteredAreas | async; track trackByAreaFn) {
+                       <mat-option [value]="area.strArea">{{area.strArea}}</mat-option>
+                     }
+                 </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Filter by Category</mat-label>
+          <input type="text"
+                 aria-label="Category"
+                 matInput
+                 [formControl]="categoryControl"
+                 [matAutocomplete]="auto">
+                 <mat-autocomplete #auto="matAutocomplete">
+                     @for (category of filteredCategories | async; track trackByCategoryFn) {
+                       <mat-option [value]="category.strCategory">{{category.strCategory}}</mat-option>
+                     }
+                 </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Filter by Ingredient</mat-label>
+          <input type="text"
+                 aria-label="Ingredient"
+                 matInput
+                 [formControl]="ingredientControl"
+                 [matAutocomplete]="auto">
+                 <mat-autocomplete #auto="matAutocomplete">
+                     @for (ingredient of filteredIngredients | async; track trackByIngredientFn) {
+                       <mat-option [value]="ingredient.strIngredient">{{ingredient.strIngredient}}</mat-option>
+                     }
+                 </mat-autocomplete>
+        </mat-form-field>
+      </form>
     <div class="search-section">
         <form (ngSubmit)="onSearch()" class="search-form">
             <div class="search-input-group">
-                <input type="text" [(ngModel)]="searchQuery" placeholder="Search for meals..." class="search-input"
+                <mat-form-field>
+                <input matInput type="text" [(ngModel)]="searchQuery" placeholder="Search for meals..." class="search-input"
                     name="searchQuery" #searchInput="ngModel" required>
-                <button type="submit" class="search-button" [disabled]="!searchQuery?.trim()">
+                </mat-form-field>
+                <button matButton type="submit" [disabled]="!searchQuery?.trim()">
                     Search
                 </button>
             </div>
         </form>
     </div>
 
-    <div class="search-results" *ngIf="searchResults.length > 0">
-        <h2>Search Results</h2>
-        <div class="meals-grid">
-            <app-preview-recipe *ngFor="let meal of searchResults" [meal]="meal"></app-preview-recipe>
-        </div>
-    </div>
-
-    <div class="loading" *ngIf="isLoading">
-        <p>Searching for meals...</p>
-    </div>
-
-    <div class="error" *ngIf="errorMessage">
-        <p>{{ errorMessage }}</p>
-    </div>
-
-    <div class="categories-results" *ngIf="categoriesResults.length > 0">
-        <h2>Categories</h2>
-        <div class="categories-grid">
-            <mat-list>
-                <mat-list-item *ngFor="let category of categoriesResults">
-                    <a [routerLink]="['/category', category.strCategory]">{{ category.strCategory }}</a>
-                </mat-list-item>
-            </mat-list>
-        </div>
-    </div>
+    <app-grid-recipe></app-grid-recipe>
 </div>
