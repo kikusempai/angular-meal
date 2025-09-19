@@ -1,0 +1,7 @@
+<div class="meal-card">
+    <img [src]="meal.strMealThumb" [alt]="meal.strMeal" class="meal-image">
+    <h3 class="meal-title">
+        <a [routerLink]="['/view', meal.idMeal]" class="meal-link">{{ meal.strMeal }}</a>
+    </h3>
+    <a *ngIf="meal.strCategory" [routerLink]="['/category', meal.strCategory]" class="meal-category">{{ meal.strCategory }}</a>
+</div>

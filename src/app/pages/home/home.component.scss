@@ -1,0 +1,56 @@
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.home-container h1 {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.search-section {
+    margin-bottom: 2rem;
+}
+
+.search-button {
+    margin-left: 1rem;
+    margin-left: 1rem;
+    border: none;
+    height: 40px;
+    width: 50px;
+    border-radius: 20px;
+    padding: 7px;
+    vertical-align: middle;
+
+    &:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .home-container {
+        padding: 1rem;
+    }
+
+    .home-container h1 {
+        font-size: 2rem;
+    }
+
+    .meals-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+}
+
+mat-chip {
+    a {
+        text-decoration: none;
+        color: #000;
+    }
+}
