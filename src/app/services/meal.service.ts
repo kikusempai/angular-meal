@@ -51,10 +51,10 @@ export interface MealResponse {
 })
 export class MealService {
   private readonly baseUrl = 'https://www.themealdb.com/api/json/v1/1';
-  private readonly parameterOptions = ['c', 'a', 'i'];
 
   constructor(private http: HttpClient) {}
 
+  // -------- List methods --------
   listCategories(): Observable<Category[]> {
     const url = `${this.baseUrl}/list.php?c=list`;
 
@@ -97,6 +97,60 @@ export class MealService {
     );
   }
 
+  // -------- Filters --------
+  filterByCategory(query: string): Observable<Meal[]> {
+    if (!query || query.trim().length === 0) {
+      return throwError(() => new Error('Category cannot be empty'));
+    }
+
+    const url = `${this.baseUrl}/filter.php?c=${encodeURIComponent(query)}`;
+
+    return this.http.get<MealResponse>(url).pipe(
+      map((response) => response.meals || []),
+      catchError((error) => {
+        console.error('Error filtering by category:', error);
+        return throwError(
+          () => new Error('Something went wrong, please try again later')
+        );
+      })
+    );
+  }
+
+  filterByArea(query: string): Observable<Meal[]> {
+    if (!query || query.trim().length === 0) {
+      return throwError(() => new Error('Area cannot be empty'));
+    }
+    const url = `${this.baseUrl}/filter.php?a=${encodeURIComponent(query)}`;
+
+    return this.http.get<MealResponse>(url).pipe(
+      map((response) => response.meals || []),
+      catchError((error) => {
+        console.error('Error filtering by area:', error);
+        return throwError(
+          () => new Error('Something went wrong, please try again later')
+        );
+      })
+    );
+  }
+
+  filterByIngredient(query: string): Observable<Meal[]> {
+    if (!query || query.trim().length === 0) {
+      return throwError(() => new Error('Ingredient cannot be empty'));
+    }
+    const url = `${this.baseUrl}/filter.php?i=${encodeURIComponent(query)}`;
+
+    return this.http.get<MealResponse>(url).pipe(
+      map((response) => response.meals || []),
+      catchError((error) => {
+        console.error('Error filtering by ingredient:', error);
+        return throwError(
+          () => new Error('Something went wrong, please try again later')
+        );
+      })
+    );
+  }
+
+  // -------- Meal methods --------
   searchMeals(query: string): Observable<Meal[]> {
     if (!query || query.trim().length === 0) {
       return throwError(() => new Error('Search query cannot be empty'));
@@ -136,24 +190,6 @@ export class MealService {
         return throwError(
           () =>
             new Error('Failed to fetch meal details. Please try again later')
-        );
-      })
-    );
-  }
-
-  filterByCategory(query: string): Observable<Meal[]> {
-    if (!query || query.trim().length === 0) {
-      return throwError(() => new Error('Category cannot be empty'));
-    }
-
-    const url = `${this.baseUrl}/filter.php?c=${encodeURIComponent(query)}`;
-
-    return this.http.get<MealResponse>(url).pipe(
-      map((response) => response.meals || []),
-      catchError((error) => {
-        console.error('Error filtering by category:', error);
-        return throwError(
-          () => new Error('Something went wrong, please try again later')
         );
       })
     );

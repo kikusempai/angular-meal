@@ -12,18 +12,16 @@ import { Subscription } from 'rxjs';
   styleUrl: './breadcrumb.component.scss',
 })
 export class BreadcrumbComponent implements OnInit, OnDestroy {
-  breadcrumbs: Array<{ label: string, url: string }> = [];
+  breadcrumbs: Array<{ label: string; url: string }> = [];
   private subscription?: Subscription;
 
-  constructor(private breadcrumbService: BreadcrumbService) { }
+  constructor(private breadcrumbService: BreadcrumbService) {}
 
   ngOnInit(): void {
-    // Initial breadcrumbs
     this.breadcrumbs = this.breadcrumbService.breadcrumbs;
 
-    // Subscribe to breadcrumb updates
     this.subscription = this.breadcrumbService.breadcrumbs$.subscribe(
-      breadcrumbs => this.breadcrumbs = breadcrumbs
+      (breadcrumbs) => (this.breadcrumbs = breadcrumbs)
     );
   }
 
@@ -33,7 +31,7 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
     }
   }
 
-  trackByFn(index: number, item: { label: string, url: string }): string {
+  trackByFn(index: number, item: { label: string; url: string }): string {
     return item.url;
   }
 }

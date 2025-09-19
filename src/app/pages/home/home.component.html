@@ -6,8 +6,8 @@
                  aria-label="Area"
                  matInput
                  [formControl]="areaControl"
-                 [matAutocomplete]="auto">
-                 <mat-autocomplete #auto="matAutocomplete">
+                 [matAutocomplete]="autoArea">
+                 <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="onAreaSelected($event)">
                      @for (area of filteredAreas | async; track trackByAreaFn) {
                        <mat-option [value]="area.strArea">{{area.strArea}}</mat-option>
                      }
@@ -19,8 +19,8 @@
                  aria-label="Category"
                  matInput
                  [formControl]="categoryControl"
-                 [matAutocomplete]="auto">
-                 <mat-autocomplete #auto="matAutocomplete">
+                 [matAutocomplete]="autoCategory">
+                 <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="onCategorySelected($event)">
                      @for (category of filteredCategories | async; track trackByCategoryFn) {
                        <mat-option [value]="category.strCategory">{{category.strCategory}}</mat-option>
                      }
@@ -32,8 +32,8 @@
                  aria-label="Ingredient"
                  matInput
                  [formControl]="ingredientControl"
-                 [matAutocomplete]="auto">
-                 <mat-autocomplete #auto="matAutocomplete">
+                 [matAutocomplete]="autoIngredient">
+                 <mat-autocomplete #autoIngredient="matAutocomplete" (optionSelected)="onIngredientSelected($event)">
                      @for (ingredient of filteredIngredients | async; track trackByIngredientFn) {
                        <mat-option [value]="ingredient.strIngredient">{{ingredient.strIngredient}}</mat-option>
                      }
@@ -47,9 +47,9 @@
                 <input matInput type="text" [(ngModel)]="searchQuery" placeholder="Search for meals..." class="search-input"
                     name="searchQuery" #searchInput="ngModel" required>
                 </mat-form-field>
-                <button matButton type="submit" [disabled]="!searchQuery?.trim()">
-                    Search
-                </button>
+                <button matFab aria-label="Search button" class="search-button" type="submit">
+                    <mat-icon>search</mat-icon>
+                  </button>
             </div>
         </form>
     </div>

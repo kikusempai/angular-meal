@@ -3,51 +3,48 @@ import { Ingredient } from '../../services/meal.service';
 import * as IngredientsActions from './ingredients.actions';
 
 export interface IngredientsState {
-    ingredients: Ingredient[];
-    selectedIngredient: string | null;
-    loading: boolean;
-    error: string | null;
+  ingredients: Ingredient[];
+  selectedIngredient: string | null;
+  loading: boolean;
+  error: string | null;
 }
 
 export const initialState: IngredientsState = {
-    ingredients: [],
-    selectedIngredient: null,
-    loading: false,
-    error: null,
+  ingredients: [],
+  selectedIngredient: null,
+  loading: false,
+  error: null,
 };
 
 export const ingredientsReducer = createReducer(
-    initialState,
+  initialState,
 
-    // Load Ingredients
-    on(IngredientsActions.loadIngredients, (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-    })),
+  on(IngredientsActions.loadIngredients, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
 
-    on(IngredientsActions.loadIngredientsSuccess, (state, { ingredients }) => ({
-        ...state,
-        ingredients,
-        loading: false,
-        error: null,
-    })),
+  on(IngredientsActions.loadIngredientsSuccess, (state, { ingredients }) => ({
+    ...state,
+    ingredients,
+    loading: false,
+    error: null,
+  })),
 
-    on(IngredientsActions.loadIngredientsFailure, (state, { error }) => ({
-        ...state,
-        loading: false,
-        error,
-    })),
+  on(IngredientsActions.loadIngredientsFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
 
-    // Select Ingredient
-    on(IngredientsActions.selectIngredient, (state, { ingredient }) => ({
-        ...state,
-        selectedIngredient: ingredient,
-    })),
+  on(IngredientsActions.selectIngredient, (state, { ingredient }) => ({
+    ...state,
+    selectedIngredient: ingredient,
+  })),
 
-    // Clear Selection
-    on(IngredientsActions.clearIngredientSelection, (state) => ({
-        ...state,
-        selectedIngredient: null,
-    }))
+  on(IngredientsActions.clearIngredientSelection, (state) => ({
+    ...state,
+    selectedIngredient: null,
+  }))
 );

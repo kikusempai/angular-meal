@@ -16,6 +16,23 @@
     margin-bottom: 2rem;
 }
 
+.search-button {
+    margin-left: 1rem;
+    margin-left: 1rem;
+    border: none;
+    height: 40px;
+    width: 50px;
+    border-radius: 20px;
+    padding: 7px;
+    vertical-align: middle;
+
+    &:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+}
+
+
 @media (max-width: 768px) {
     .home-container {
         padding: 1rem;

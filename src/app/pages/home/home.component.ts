@@ -3,13 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import {
-  MealService,
-  Meal,
-  Ingredient,
-  Area,
-  Category,
-} from '../../services/meal.service';
+import { Ingredient, Area, Category } from '../../services/meal.service';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -25,12 +19,14 @@ import { GridRecipeComponent } from '../../components/grid-recipe/grid-recipe.co
 import {
   MatAutocomplete,
   MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { startWith, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
@@ -47,6 +43,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -62,7 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   filteredAreas: Observable<Area[]> = of([]);
   filteredCategories: Observable<Category[]> = of([]);
 
-  // NgRx observables
+  // Selectors observables
   categories$ = this.store.select(CategoriesSelectors.selectAllCategories);
   categoriesLoading$ = this.store.select(
     CategoriesSelectors.selectCategoriesLoading
@@ -90,10 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private mealService: MealService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.filteredIngredients = this.ingredientControl.valueChanges.pipe(
@@ -124,11 +118,60 @@ export class HomeComponent implements OnInit, OnDestroy {
         )
       )
     );
-    // Load all data from NgRx store
     this.store.dispatch(CategoriesActions.loadCategories());
     this.store.dispatch(AreasActions.loadAreas());
     this.store.dispatch(IngredientsActions.loadIngredients());
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // -------- Event handlers --------
+  onSearch(): void {
+    if (this.searchQuery && this.searchQuery.trim().length > 0) {
+      this.store.dispatch(
+        RecipesActions.loadRecipes({ searchQuery: this.searchQuery.trim() })
+      );
+      this.categoryControl.setValue('');
+      this.areaControl.setValue('');
+      this.ingredientControl.setValue('');
+    }
+  }
+
+  onAreaSelected($event: MatAutocompleteSelectedEvent): void {
+    this.store.dispatch(AreasActions.selectArea({ area: $event.option.value }));
+    this.store.dispatch(
+      RecipesActions.loadRecipes({ area: $event.option.value })
+    );
+    this.categoryControl.setValue('');
+    this.ingredientControl.setValue('');
+  }
+
+  onCategorySelected($event: MatAutocompleteSelectedEvent): void {
+    this.store.dispatch(
+      CategoriesActions.selectCategory({ category: $event.option.value })
+    );
+    this.store.dispatch(
+      RecipesActions.loadRecipes({ category: $event.option.value })
+    );
+    this.areaControl.setValue('');
+    this.ingredientControl.setValue('');
+  }
+
+  onIngredientSelected($event: MatAutocompleteSelectedEvent): void {
+    this.store.dispatch(
+      IngredientsActions.selectIngredient({ ingredient: $event.option.value })
+    );
+    this.store.dispatch(
+      RecipesActions.loadRecipes({ ingredient: $event.option.value })
+    );
+    this.categoryControl.setValue('');
+    this.areaControl.setValue('');
+  }
+
+  // -------- Misc --------
   private _filter<T extends { [key: string]: any }>(
     value: string,
     superSet: T[],
@@ -138,19 +181,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     return superSet.filter((item) =>
       String(item[key]).toLowerCase().includes(filterValue)
     );
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  onSearch(): void {
-    if (this.searchQuery && this.searchQuery.trim().length > 0) {
-      this.store.dispatch(
-        RecipesActions.loadRecipes({ searchQuery: this.searchQuery.trim() })
-      );
-    }
   }
 
   selectCategory(category: string): void {

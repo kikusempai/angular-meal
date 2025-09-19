@@ -1,24 +1,21 @@
 import { createAction, props } from '@ngrx/store';
 import { Area } from '../../services/meal.service';
 
-// Load Areas Actions
 export const loadAreas = createAction('[Areas] Load Areas');
 
 export const loadAreasSuccess = createAction(
-    '[Areas] Load Areas Success',
-    props<{ areas: Area[] }>()
+  '[Areas] Load Areas Success',
+  props<{ areas: Area[] }>()
 );
 
 export const loadAreasFailure = createAction(
-    '[Areas] Load Areas Failure',
-    props<{ error: string }>()
+  '[Areas] Load Areas Failure',
+  props<{ error: string }>()
 );
 
-// Select Area Action
 export const selectArea = createAction(
-    '[Areas] Select Area',
-    props<{ area: string }>()
+  '[Areas] Select Area',
+  props<{ area: string }>()
 );
 
-// Clear Selection Action
 export const clearAreaSelection = createAction('[Areas] Clear Area Selection');
